@@ -1,12 +1,12 @@
 {
-  "extends": ["eslint:recommended"],
+  "extends": ["eslint:recommended", "plugin:node"],
   "parserOptions": {
     "ecmaVersion": 6
   },
   "env": {
     "browser": true
   },
-  "plugins": ["html"],
+  "plugins": ["html", "node"],
   "rules": {
     "brace-style": "off",
     "new-cap": ["error", { "capIsNewExceptions": ["Polymer"] }],
