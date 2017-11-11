@@ -2,8 +2,7 @@
   "name": "techinterop.io",
   "version": "1.0.0",
   "private": true,
-  "description":
-    "A place to see examples of interop between different technologies",
+  "description": "A place to see examples of interop between different technologies",
   "main": "index.js",
   "scripts": {
     "build": "polymer build --root public",
@@ -35,6 +34,9 @@
     "prettier": "^1.8.2"
   },
   "lint-staged": {
-    "*.{js,json,css}": ["prettier --write", "git add"]
+    "*.{js,json,css}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }
