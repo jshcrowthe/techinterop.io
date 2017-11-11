@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "webdev-codes",
+    "prod": "techinterop-io"
+  }
+}

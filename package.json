@@ -1,0 +1,23 @@
+{
+  "name": "techinterop.io",
+  "version": "1.0.0",
+  "description": "A place to see examples of interop between different technologies",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jshcrowthe/techinterop.io.git"
+  },
+  "author": {
+    "name": "Josh Crowther",
+    "email": "jshcrowthe@gmail.com",
+    "url": "https://jcrowther.io"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jshcrowthe/techinterop.io/issues"
+  },
+  "homepage": "https://github.com/jshcrowthe/techinterop.io#readme"
+}
