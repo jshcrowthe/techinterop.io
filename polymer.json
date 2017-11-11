@@ -1,0 +1,29 @@
+{
+  "entrypoint": "public/index.html",
+  "shell": "public/src/my-app.html",
+  "fragments": [
+    "public/src/my-view1.html",
+    "public/src/my-view2.html",
+    "public/src/my-view3.html",
+    "public/src/my-view404.html"
+  ],
+  "sources": ["public/src/**/*", "public/images/**/*"],
+  "extraDependencies": [
+    "public/manifest.json",
+    "public/components/webcomponentsjs/*.js"
+  ],
+  "lint": {
+    "rules": ["polymer-2"]
+  },
+  "builds": [
+    {
+      "preset": "es5-bundled"
+    },
+    {
+      "preset": "es6-bundled"
+    },
+    {
+      "preset": "es6-unbundled"
+    }
+  ]
+}

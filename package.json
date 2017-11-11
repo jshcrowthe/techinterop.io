@@ -6,8 +6,12 @@
     "A place to see examples of interop between different technologies",
   "main": "index.js",
   "scripts": {
+    "lint": "npm run lint:javascript && polymer lint",
+    "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
     "precommit": "lint-staged",
-    "test": "echo \"WARNING: No tests specified\" && exit 0"
+    "test": "echo \"WARNING: No tests specified\" && exit 0",
+    "test:integration":
+      "polymer build # test that psk builds without error with the CLI"
   },
   "repository": {
     "type": "git",
@@ -24,6 +28,8 @@
   },
   "homepage": "https://github.com/jshcrowthe/techinterop.io#readme",
   "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-plugin-html": "^2.0.0",
     "husky": "^0.14.3",
     "lint-staged": "^5.0.0",
     "prettier": "^1.8.2"
