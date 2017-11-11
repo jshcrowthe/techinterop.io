@@ -1,6 +1,7 @@
 {
   "name": "techinterop.io",
   "version": "1.0.0",
+  "private": true,
   "description": "A place to see examples of interop between different technologies",
   "main": "index.js",
   "scripts": {
