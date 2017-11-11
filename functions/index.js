@@ -3,7 +3,7 @@
  */
 const { config, database } = require('firebase-functions');
 const firebase = require('firebase-admin');
-const admin = firebase.initializeApp(config());
+const admin = firebase.initializeApp(config().firebase);
 
 /**
  * Constants
