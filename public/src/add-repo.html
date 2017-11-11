@@ -10,6 +10,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../components/polymer/polymer-element.html">
 <link rel="import" href="../components/paper-input/paper-input.html">
+<link rel="import" href="../components/paper-input/paper-textarea.html">
 <link rel='import' href='../components/paper-button/paper-button.html'>
 <link rel="import" href="../components/paper-autocomplete/paper-autocomplete.html">
 <link rel="import" href="shared-styles.html">
@@ -17,6 +18,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="add-repo">
   <template>
     <style include="shared-styles">
+      *[hidden] {
+        display: none !important;
+      }
+
       :host {
         display: block;
 
@@ -71,6 +76,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         z-index: 1;
         background: rgba(255, 255, 255, 0.8);
       }
+      .actions {
+        margin-top: 15px;
+      }
     </style>
 
     <div class="card">
@@ -90,16 +98,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <h1>Submit New Demo</h1>
       <paper-input id='repoName' value='{{newRepo.repo::change}}' label='Project Name'></paper-input>
       <paper-input id='repoId' value='{{newRepo.url::change}}' label='Project Repository Link' placeholder='https://github.com/username/project'></paper-input>
-      <paper-input id='tagsInput' label='Technologies Used' always-float-label></paper-input>
+      <paper-textarea value='{{newRepo.description::input}}' label='Project Description'></paper-textarea>
+      <paper-input id='tagsInput' label='Technologies Used' on-keyup='_checkForEnter'></paper-input>
       <paper-autocomplete-suggestions on-autocomplete-selected='_leverageValue' for='tagsInput' source='[[_formatTags(tags)]]'></paper-autocomplete-suggestions>
       <div hidden='[[_hideTags(newRepo.tags.length)]]'>
         <template is='dom-repeat' items='[[newRepo.tags]]' as='tag'>
           <span class='tag'>[[tag]]</span>
         </template>
       </div>
-      <paper-button raised on-click='_cancelInput'>Cancel</paper-button>
-      <paper-button raised on-click='_resetForm'>Clear</paper-button>
-      <paper-button raised on-click='_submitForm'>Submit</paper-button>
+      <div class='actions'>
+        <paper-button raised on-click='_cancelInput'>Cancel</paper-button>
+        <paper-button raised on-click='_resetForm'>Clear</paper-button>
+        <paper-button raised on-click='_submitForm'>Submit</paper-button>
+      </div>
     </div>
   </template>
 
@@ -129,6 +140,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _cancelInput() {
           this.dispatchEvent(new CustomEvent('cancel-input'));
         }
+        _checkForEnter(e) {
+          /**
+           * Wrapping this in a setTimeout to make it so an autocomplete
+           * selection doesn't trigger a partial completion
+           */
+          setTimeout(() => {            
+            if (!this.$.tagsInput.value) return;
+            if (e.keyCode === 13) {
+              this.newRepo = Object.assign({}, this.newRepo, {
+                tags: [
+                  ...this.newRepo.tags,
+                  this.$.tagsInput.value
+                ]
+              });
+              this.$.tagsInput.value = '';
+            }
+          }, 0);          
+        }
         _formatTags(tags) {
           return tags.map(tag => ({ text: tag.tag, value: tag.tag }));
         }
@@ -148,6 +177,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           this.$.tagsInput.value = '';
         }
         _submitForm() {
+          if (this.$.tagsInput.value) {
+            this.newRepo = Object.assign({}, this.newRepo, {
+              tags: [
+                ...this.newRepo.tags,
+                ...this.$.tagsInput.value.split(',').map(string => string.trim()).map(string => string.toLowerCase())
+              ]
+            });
+            this.$.tagsInput.value = ''
+          }
+
           this.loading = true;
           fetch('https://techinterop-io.firebaseio.com/proposals.json', { 
             method: 'POST',
