@@ -1,0 +1,17 @@
+{
+  "name": "techinterop.io",
+  "description":
+    "A place to see examples of interop between different technologies",
+  "main": "index.js",
+  "authors": ["Josh Crowther <jshcrowthe@gmail.com> (https://jcrowther.io)"],
+  "license": "MIT",
+  "homepage": "https://github.com/jshcrowthe/techinterop.io",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/components",
+    "test",
+    "tests"
+  ]
+}
