@@ -29,7 +29,7 @@ exports.onRepoWrite = database.ref(REPO_REF).onWrite(event => {
     });
   });
 
-  const tags = Object.keys(obj).map(key => ({ tag: key, count: obj[key] }));
+  const tags = Object.keys(tagsObj).map(key => ({ tag: key, count: tagsObj[key] }));
 
   return admin.database().ref(TAGS_REF).set(tags);
 });

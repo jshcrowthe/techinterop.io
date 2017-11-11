@@ -8,5 +8,18 @@
 <body>
   <h1><code>techinterop.io</code></h1>
   <p>A place to see demos of technologies working together</p>
+  <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    const config = {
+      apiKey: "AIzaSyBjyAH3Mdqjd0cyZYAYS1R5fkkupE7anAg",
+      authDomain: "techinterop-io.firebaseapp.com",
+      databaseURL: "https://techinterop-io.firebaseio.com",
+      projectId: "techinterop-io",
+      storageBucket: "techinterop-io.appspot.com",
+      messagingSenderId: "1012137051482"
+    };
+    firebase.initializeApp(config);
+  </script>
 </body>
 </html>
