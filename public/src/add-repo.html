@@ -1,0 +1,170 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../components/polymer/polymer-element.html">
+<link rel="import" href="../components/paper-input/paper-input.html">
+<link rel='import' href='../components/paper-button/paper-button.html'>
+<link rel="import" href="../components/paper-autocomplete/paper-autocomplete.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="add-repo">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      .repo {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .repo-header {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .tag {
+        padding: 3px 5px;
+        margin-right: 5px;
+        background: #b6deff;
+        border-radius: 2px;
+      }
+
+      .tag:last-child {
+        margin-right: 0;
+      }
+
+      h1 {
+        margin: 0;
+      }
+
+      .card {
+        position:relative;
+      }
+
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+        background: rgba(0, 0, 0, 0.3);
+      }
+    </style>
+
+    <div class="card">
+      <div id='loading' hidden='[[!loading]]'>
+        <svg version="1.1" id="loader-1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="40px" height="40px" viewBox="0 0 40 40" enable-background="new 0 0 40 40" xml:space="preserve">
+          <path opacity="0.2" fill="#000" d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946
+            s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634
+            c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z" />
+          <path fill="#000" d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0
+            C22.32,8.481,24.301,9.057,26.013,10.047z">
+            <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 20 20" to="360 20 20" dur="0.5s" repeatCount="indefinite"
+            />
+          </path>
+        </svg>
+      </div>
+      <h1>Submit New Demo</h1>
+      <paper-input id='repoName' value='{{newRepo.repo::change}}' label='Project Name'></paper-input>
+      <paper-input id='repoId' value='{{newRepo.url::change}}' label='Project Repository Link' placeholder='https://github.com/username/project'></paper-input>
+      <paper-input id='tagsInput' label='Technologies Used' always-float-label></paper-input>
+      <paper-autocomplete-suggestions on-autocomplete-selected='_leverageValue' for='tagsInput' source='[[_formatTags(tags)]]'></paper-autocomplete-suggestions>
+      <div hidden='[[_hideTags(newRepo.tags.length)]]'>
+        <template is='dom-repeat' items='[[newRepo.tags]]' as='tag'>
+          <span class='tag'>[[tag]]</span>
+        </template>
+      </div>
+      <paper-button raised on-click='_cancelInput'>Cancel</paper-button>
+      <paper-button raised on-click='_resetForm'>Clear</paper-button>
+      <paper-button raised on-click='_submitForm'>Submit</paper-button>
+    </div>
+  </template>
+
+  <script>
+    (() => {
+      const blankRepo = () => ({ tags: [] });
+
+      class AddRepo extends Polymer.Element {
+        static get is() { return 'add-repo'; }
+        static get properties() {
+          return {
+            tags: {
+              type: Array,
+              readonly: true,
+              value: () => []
+            },
+            newRepo: {
+              type: Object,
+              value: blankRepo
+            },
+            loading: {
+              type: Boolean,
+              value: false
+            }
+          }
+        }
+        _cancelInput() {
+          this.dispatchEvent(new CustomEvent('cancel-input'));
+        }
+        _formatTags(tags) {
+          return tags.map(tag => ({ text: tag.tag, value: tag.tag }));
+        }
+
+        _hideTags(length) {
+          return length === 0;
+        }
+
+        _leverageValue(evt) {
+          const selected = evt.detail.text;
+          this.newRepo = Object.assign({}, this.newRepo, {
+            tags: [
+              ...this.newRepo.tags,
+              selected
+            ]
+          });
+          this.$.tagsInput.value = '';
+        }
+        _submitForm() {
+          this.loading = true;
+          fetch('https://techinterop-io.firebaseio.com/proposals.json', { 
+            method: 'POST',
+            body: JSON.stringify(this.newRepo)
+          })
+            .then(res => (this.loading = false))
+            .then(() => this.dispatchEvent(new CustomEvent('proposal-submit', { detail: { message: 'Your proposal has been submitted for review'} })))
+            .then(() => {
+               this._resetForm();
+               this._cancelInput();
+            })
+        }
+        _resetForm() {
+          this.newRepo = blankRepo();
+          this.$.tagsInput.value = '';          
+        }
+      }
+
+      window.customElements.define(AddRepo.is, AddRepo);
+    })();
+  </script>
+</dom-module>
