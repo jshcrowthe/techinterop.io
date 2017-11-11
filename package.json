@@ -6,12 +6,11 @@
     "A place to see examples of interop between different technologies",
   "main": "index.js",
   "scripts": {
+    "build": "polymer build --root public",
     "lint": "npm run lint:javascript && polymer lint",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
     "precommit": "lint-staged",
-    "test": "echo \"WARNING: No tests specified\" && exit 0",
-    "test:integration":
-      "polymer build # test that psk builds without error with the CLI"
+    "test": "echo \"WARNING: No tests specified\" && exit 0"
   },
   "repository": {
     "type": "git",
