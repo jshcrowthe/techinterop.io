@@ -1,17 +1,14 @@
 {
-  "entrypoint": "public/index.html",
-  "shell": "public/src/my-app.html",
+  "entrypoint": "index.html",
+  "shell": "src/my-app.html",
   "fragments": [
-    "public/src/my-view1.html",
-    "public/src/my-view2.html",
-    "public/src/my-view3.html",
-    "public/src/my-view404.html"
+    "src/my-view1.html",
+    "src/my-view2.html",
+    "src/my-view3.html",
+    "src/my-view404.html"
   ],
-  "sources": ["public/src/**/*", "public/images/**/*"],
-  "extraDependencies": [
-    "public/manifest.json",
-    "public/components/webcomponentsjs/*.js"
-  ],
+  "sources": ["src/**/*", "images/**/*"],
+  "extraDependencies": ["manifest.json", "components/webcomponentsjs/*.js"],
   "lint": {
     "rules": ["polymer-2"]
   },
@@ -21,9 +18,6 @@
     },
     {
       "preset": "es6-bundled"
-    },
-    {
-      "preset": "es6-unbundled"
     }
   ]
 }
