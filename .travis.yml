@@ -1,8 +1,14 @@
 language: node_js
 node_js: 8
+install:
+  - npm install
+  - pushd functions && npm install && popd
+
 cache:
   directories:
   - node_modules
+  - functions/node_modules
+
 deploy:
   skip_cleanup: true
   provider: firebase
