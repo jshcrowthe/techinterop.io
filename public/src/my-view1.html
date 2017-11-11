@@ -68,7 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
       _filterVals(values) {
-        return repo => values.length === 0 || repo.tags.some(tag => values.includes(tag));
+        return repo => values.length === 0 || values.every(tag => repo.tags.includes(tag));
       }
     }
 
