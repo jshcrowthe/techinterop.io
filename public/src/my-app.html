@@ -19,12 +19,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../components/app-route/app-route.html">
 <link rel="import" href="../components/iron-pages/iron-pages.html">
 <link rel="import" href="../components/iron-selector/iron-selector.html">
+<link rel="import" href="../components/paper-checkbox/paper-checkbox.html">
 <link rel="import" href="../components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
 <link rel="lazy-import" href="my-view1.html">
-<link rel="lazy-import" href="my-view2.html">
-<link rel="lazy-import" href="my-view3.html">
 <link rel="lazy-import" href="my-view404.html">
 
 <dom-module id="my-app">
@@ -66,6 +65,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         color: black;
         font-weight: bold;
       }
+
+      .sidebar-list {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sidebar-list paper-checkbox {
+        margin-bottom: 15px;
+        text-transform: capitalize
+      }
     </style>
 
     <app-location
@@ -83,11 +93,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-        <app-toolbar>Menu</app-toolbar>
-        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-          <a name="view1" href="[[rootPath]]view1">View One</a>
-          <a name="view2" href="[[rootPath]]view2">View Two</a>
-          <a name="view3" href="[[rootPath]]view3">View Three</a>
+        <app-toolbar>Technologies</app-toolbar>
+        <iron-selector selected-values='{{filters}}' class='sidebar-list' attr-for-selected='name' multi selected-attribute='checked'>
+          <template is='dom-repeat' items='[[tags]]'>
+            <paper-checkbox name='[[item.tag]]'>[[item.tag]] ([[item.count]])</paper-checkbox>
+          </template>
         </iron-selector>
       </app-drawer>
 
@@ -97,7 +107,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>My App</div>
+            <div main-title>Techinterop.io</div>
           </app-toolbar>
         </app-header>
 
@@ -106,9 +116,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
-          <my-view1 name="view1"></my-view1>
-          <my-view2 name="view2"></my-view2>
-          <my-view3 name="view3"></my-view3>
+          <my-view1 name="view1" filters='[[filters]]' repos='[[repos]]'></my-view1>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
       </app-header-layout>
@@ -126,6 +134,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             reflectToAttribute: true,
             observer: '_pageChanged',
           },
+          tags: {
+            type: Array,
+            value: () => []
+          },
+          repos: {
+            type: Array,
+            value: () => []
+          },
           routeData: Object,
           subroute: String,
           // This shouldn't be neccessary, but the Analyzer isn't picking up
@@ -138,6 +154,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         return [
           '_routePageChanged(routeData.page)',
         ];
+      }
+
+      ready() {
+        super.ready();
+        fetch('https://techinterop-io.firebaseio.com/tags.json')
+          .then(res => res.json())
+          .then(tags => (this.tags = tags))
+        fetch('https://techinterop-io.firebaseio.com/repos.json')
+          .then(res => res.json())
+          .then(reposObj => Object.keys(reposObj).map(key => reposObj[key]))
+          .then(repos => (this.repos = repos));
       }
 
       _routePageChanged(page) {

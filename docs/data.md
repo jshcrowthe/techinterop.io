@@ -12,7 +12,8 @@ The data at this point will be a firebase array (i.e. not a JS array) of objects
 interface Repo {
   repo: string; // The repo name
   url: string; // The URL of the repo
-  tags: string[] // An array of tags
+  description: string; // A description of the repo purpose
+  tags: string[] // An array of tag strings
 }
 ```
 

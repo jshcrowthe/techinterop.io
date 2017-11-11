@@ -19,19 +19,57 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         padding: 10px;
       }
+
+      .repo {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .repo-header {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      h1 {
+        margin:0;
+      }
     </style>
 
     <div class="card">
-      <div class="circle">1</div>
-      <h1>View One</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+      <template is='dom-repeat' items='[[repos]]' as='repo' filter='[[_filterVals(filters, filters.length)]]'>
+        <div class="repo">
+          <div class='repo-header'>
+            <a href$='[[repo.url]]'><h1>[[repo.repo]]</h1></a>
+            <div>
+              <template is='dom-repeat' items='[[repo.tags]]' as='tag'>
+                <span>[[tag]]</span>
+              </template>
+            </div>
+          </div>
+          <p>[[repo.description]]</p>
+        </div>
+      </template>
     </div>
   </template>
 
   <script>
     class MyView1 extends Polymer.Element {
       static get is() { return 'my-view1'; }
+      static get properties() {
+        return {
+          filters: {
+            type: Array,
+            value: () => []
+          },
+          repos: {
+            type: Array,
+            value: () => []
+          }
+        }
+      }
+      _filterVals(values) {
+        return repo => values.length === 0 || repo.tags.some(tag => values.includes(tag));
+      }
     }
 
     window.customElements.define(MyView1.is, MyView1);
