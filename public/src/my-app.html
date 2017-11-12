@@ -104,7 +104,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-        <app-toolbar>Technologies</app-toolbar>
+        <app-toolbar>Projects</app-toolbar>
         <iron-selector selected-values='{{filters}}' class='sidebar-list' attr-for-selected='name' multi selected-attribute='checked'>
           <template is='dom-repeat' items='[[tags]]'>
             <paper-checkbox name='[[item.tag]]'>[[item.tag]] ([[item.count]])</paper-checkbox>
