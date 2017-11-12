@@ -151,7 +151,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               this.newRepo = Object.assign({}, this.newRepo, {
                 tags: [
                   ...this.newRepo.tags,
-                  this.$.tagsInput.value
+                  ...this.$.tagsInput.value.split(',').map(string => string.trim()).map(string => string.toLowerCase())
                 ]
               });
               this.$.tagsInput.value = '';
