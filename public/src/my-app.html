@@ -27,6 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="my-icons.html">
 
 <link rel="lazy-import" href="my-view1.html">
+<link rel="lazy-import" href="admin-view.html">
 <link rel="lazy-import" href="add-repo.html">
 <link rel="lazy-import" href="my-view404.html">
 
@@ -127,6 +128,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             fallback-selection="view404"
             role="main">
           <my-view1 name="view1" filters='[[filters]]' repos='[[repos]]'></my-view1>
+          <admin-view name="admin"></admin-view>
           <add-repo name='add-repo' tags='[[tags]]' on-cancel-input='_goHome' on-proposal-submit='_showMessage'></add-repo>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
@@ -214,7 +216,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _pageChanged(page) {
         const map = {
           view1: 'my-view1.html',
-          'add-repo': 'add-repo.html'
+          'add-repo': 'add-repo.html',
+          admin: 'admin-view.html'
         };
 
         const htmlUrl = map[page] || 'my-view404.html';

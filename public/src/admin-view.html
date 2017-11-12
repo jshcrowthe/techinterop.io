@@ -1,0 +1,154 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../components/polymer/polymer-element.html">
+<link rel="import" href="../components/paper-button/paper-button.html">
+<link rel='import' href='firebase.html'>
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="admin-view">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+
+      .repo {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .repo-header {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .tag {
+        padding: 3px 5px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        background: #b6deff;
+        border-radius: 2px;
+      }
+
+      .tag:last-child {
+        margin-right: 0;
+      }
+
+      h1 {
+        margin: 0;
+      }
+    </style>
+
+    <div class="card">
+      <h1>Admin View</h1>
+      <div hidden='[[loggedIn]]'>
+        <paper-button on-click='_signIn' raised>Sign In</paper-button>
+      </div>
+      <div hidden='[[!loggedIn]]'>
+        <template is='dom-repeat' items='[[repos]]' as='repo'>
+          <div class="repo" data-uid$='[[repo.uid]]'>
+            <div class='repo-header'>
+              <a href$='[[repo.url]]'>
+                <h1>[[repo.repo]]</h1>
+              </a>
+              <div class='tag-container'>
+                <template is='dom-repeat' items='[[repo.tags]]' as='tag'>
+                  <span class='tag'>[[tag]]</span>
+                </template>
+              </div>
+            </div>
+            <p>[[repo.description]]</p>
+            <div>
+              <paper-button on-click='_approveProposal'>Approve</paper-button>
+              <paper-button on-click='_rejectProposal'>Reject</paper-button>
+            </div>
+          </div>
+        </template>
+        <div hidden='[[repos.length]]'>
+          <p>No repositories to process</p>
+        </div>
+      </div>      
+    </div>
+  </template>
+
+  <script>
+    (() => {
+      const dbRef = firebase.database().ref('/proposals');
+      class AdminView extends Polymer.Element {
+        static get is() { return 'admin-view'; }
+        static get properties() {
+          return {
+            loggedIn: {
+              type: Boolean,
+              value: false,
+              observer: '_fetchProposals'
+            },
+            repos: {
+              type: Array,
+              value: () => []
+            },
+            reposObj: {
+              type: Object,
+              value: () => ({})
+            }
+          }
+        }
+        ready() {
+          super.ready();
+          firebase.auth().onAuthStateChanged(user => {
+            if (user) this.loggedIn = true;
+          });
+        }
+        _approveProposal(event) {
+          const uid = event.target.parentElement.parentElement.getAttribute('data-uid');
+          if (this.reposObj[uid]) {
+            firebase.database().ref('/repos').push(this.reposObj[uid]);
+            dbRef.child(uid).remove();
+          }
+        }
+        _fetchProposals() {
+          if (firebase.auth().currentUser) {
+            dbRef.on('value', snap => {
+              const reposObj = snap.val();
+              if (reposObj) {
+                this.reposObj = reposObj;
+                this.repos = Object.keys(reposObj).map(key => Object.assign({}, reposObj[key], { uid: key }))
+              } else {
+                this.reposObj = {};
+                this.repos = [];
+              }
+            });
+          } else {
+            this.repos = [];
+          }
+        }
+        _rejectProposal(event) {
+          const uid = event.target.parentElement.parentElement.getAttribute('data-uid');
+          dbRef.child(uid).remove();
+        }
+        _signIn() {
+          const provider = new firebase.auth.GoogleAuthProvider();
+          firebase.auth().signInWithPopup(provider);
+        }
+      }
+
+      window.customElements.define(AdminView.is, AdminView);
+    })();    
+  </script>
+</dom-module>
