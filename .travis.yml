@@ -9,7 +9,6 @@ cache:
 before_deploy:
   - rm -rf public
   - mv build/es6-bundled/public public
-  - mv build/es6-bundled/service-worker.js public
 deploy:
   skip_cleanup: true
   provider: firebase

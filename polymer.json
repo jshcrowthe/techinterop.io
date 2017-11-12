@@ -23,10 +23,7 @@
       "html": {
         "minify": true
       },
-      "bundle": true,
-      "addServiceWorker": true,
-      "addPushManifest": true,
-      "swPrecacheConfig": "../sw-precache-config.js"
+      "bundle": true
     }
   ],
   "lint": {
