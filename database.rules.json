@@ -12,7 +12,8 @@
     "proposals": {
       ".read":
         "root.child('users').child(auth.uid).child('isAdmin').val() == true",
-      ".write": "newData.exists()"
+      ".write":
+        "newData.exists() || root.child('users').child(auth.uid).child('isAdmin').val() == true"
     },
     "users": {
       ".read": false,
