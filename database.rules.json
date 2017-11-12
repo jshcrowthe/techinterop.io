@@ -1,0 +1,21 @@
+{
+  "rules": {
+    "tags": {
+      ".read": true,
+      ".write": false
+    },
+    "repos": {
+      ".read": true,
+      ".write":
+        "root.child('users').child(auth.uid).child('isAdmin').val() == true"
+    },
+    "proposals": {
+      ".read": "auth != null",
+      ".write": true
+    },
+    "users": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
