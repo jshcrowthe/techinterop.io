@@ -118,8 +118,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         _approveProposal(event) {
           const uid = event.target.parentElement.parentElement.getAttribute('data-uid');
           if (this.reposObj[uid]) {
-            firebase.database().ref('/repos').push(this.reposObj[uid]);
-            dbRef.child(uid).remove();
+            firebase.database().ref('/repos').push(this.reposObj[uid]).then(() => dbRef.child(uid).remove());
           }
         }
         _fetchProposals() {
