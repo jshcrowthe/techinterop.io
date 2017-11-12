@@ -10,8 +10,9 @@
         "root.child('users').child(auth.uid).child('isAdmin').val() == true"
     },
     "proposals": {
-      ".read": "auth != null",
-      ".write": true
+      ".read":
+        "root.child('users').child(auth.uid).child('isAdmin').val() == true",
+      ".write": "newData.exists()"
     },
     "users": {
       ".read": false,
