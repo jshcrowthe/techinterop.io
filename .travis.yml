@@ -1,8 +1,5 @@
 language: node_js
 node_js: 8
-install:
-  - npm install
-  - pushd functions && npm install && popd
 
 cache:
   directories:
@@ -10,7 +7,6 @@ cache:
   - functions/node_modules
 
 before_deploy:
-  - npm run build
   - rm -rf public
   - mv build/es6-bundled/public public
   - mv build/es6-bundled/service-worker.js public
