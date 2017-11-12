@@ -7,7 +7,7 @@
   "scripts": {
     "build": "polymer build --root public",
     "install:bower": "bower install",
-    "install:functions": "pushd functions && npm install && popd",
+    "install:functions": "npm --prefix ./functions install ./functions",
     "lint": "npm run lint:javascript && polymer lint",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
     "precommit": "lint-staged",
