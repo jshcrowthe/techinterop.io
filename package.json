@@ -5,7 +5,7 @@
   "description": "A place to see examples of interop between different technologies",
   "main": "index.js",
   "scripts": {
-    "build": "polymer build --root public",
+    "build": "polymer build --root public && workbox-cli generate:sw",
     "install:bower": "bower install",
     "install:functions": "npm --prefix ./functions install ./functions",
     "lint": "npm run lint:javascript && polymer lint",
@@ -37,7 +37,8 @@
     "lint-staged": "^5.0.0",
     "npm-run-all": "^4.1.2",
     "polymer-cli": "^1.5.7",
-    "prettier": "^1.8.2"
+    "prettier": "^1.8.2",
+    "workbox-cli": "^2.1.1"
   },
   "lint-staged": {
     "*.{js,json,css}": [
