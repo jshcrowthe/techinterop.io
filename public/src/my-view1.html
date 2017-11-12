@@ -51,19 +51,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         margin:0;
       }
     </style>
-
-    <div class="card">
+    <div>
       <template is='dom-repeat' items='[[repos]]' as='repo' filter='[[_filterVals(filters, filters.length)]]'>
-        <div class="repo">
-          <div class='repo-header'>
-            <a href$='[[repo.url]]'><h1>[[repo.repo]]</h1></a>
-            <div class='tag-container'>
-              <template is='dom-repeat' items='[[repo.tags]]' as='tag'>
-                <span class='tag'>[[tag]]</span>
-              </template>
+        <div class="card">
+          <div class="repo">
+            <div class='repo-header'>
+              <a href$='[[repo.url]]'><h1>[[repo.repo]]</h1></a>
+              <div class='tag-container'>
+                <template is='dom-repeat' items='[[repo.tags]]' as='tag'>
+                  <span class='tag'>[[tag]]</span>
+                </template>
+              </div>
             </div>
+            <p>[[repo.description]]</p>
           </div>
-          <p>[[repo.description]]</p>
         </div>
       </template>
     </div>
